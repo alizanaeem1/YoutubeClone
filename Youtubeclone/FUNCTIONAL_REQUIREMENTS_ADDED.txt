@@ -1,0 +1,146 @@
+Functional Requirements Added To This Project
+============================================
+
+Authentication
+--------------
+1. Users can register a new account with name, email, and password.
+2. Users can log in with email and password.
+3. Users can log out from the profile menu.
+4. The login/register page has a polished UI with mode tabs, labelled fields, error display, and loading state.
+5. The profile dropdown shows the user's avatar/initial, name, handle, "View your channel", and "Logout".
+
+Navbar And Search
+-----------------
+1. The navbar includes a search input for video search.
+2. Search results update by query and show a results heading.
+3. A clear/cross button appears in the search bar when text is entered.
+4. A voice search button was added beside search.
+5. Voice search records speech using browser speech recognition, fills the search text, and runs search.
+6. Voice search shows a recording popover while listening.
+7. The recording popover includes a close/cross button to stop and dismiss voice recording.
+8. The navbar includes a notification bell.
+9. The navbar includes a Create menu with Upload video, Go live, Create Short, and Create post.
+
+Notifications
+-------------
+1. Creators receive notifications when someone comments on their videos.
+2. Creators receive notifications when someone likes their videos.
+3. Creators receive notifications when someone subscribes to their channel.
+4. Subscribed users receive notifications when a subscribed creator uploads a new video.
+5. Notifications appear in a bell dropdown in the navbar.
+6. Notifications can be marked as read individually when opened.
+7. All notifications can be marked as read.
+
+Sidebar
+-------
+1. The sidebar uses a compact YouTube-style rail layout.
+2. Sidebar includes Home, Shorts, Subscriptions, and You.
+3. The You menu expands into options:
+   - Your channel
+   - History
+   - Playlists
+   - Watch later
+   - Liked videos
+   - Your videos
+   - Downloads
+4. The You menu is scrollable and positioned so all options can be reached.
+
+Video Feed
+----------
+1. Home feed loads videos from the backend.
+2. Search filtering works with the home feed.
+3. Category filtering is available for All, Entertainment, Education, Gaming, Technology, Music, Sports, News, and Vlog.
+4. Shorts are excluded from the normal home feed.
+5. Desktop video grid shows 3 videos per row.
+6. Tablet video grid shows 2 videos per row.
+7. Mobile video grid shows 1 video per row.
+
+Video Card Menu
+---------------
+1. Each video card has a three-dot menu.
+2. Menu includes Save to Watch Later.
+3. Menu includes Add to playlist.
+4. Menu includes Download.
+5. Menu includes Not interested.
+6. Owner video cards can show management actions such as edit/delete.
+7. Not interested can hide a video from the feed UI.
+
+Watch Later
+-----------
+1. Users can save videos to Watch Later.
+2. Users can view saved Watch Later videos on the Watch Later page.
+3. Watch Later is accessible through the You sidebar menu.
+
+Playlists
+---------
+1. Users can create playlists.
+2. Users can view their playlists.
+3. Users can open a playlist detail page.
+4. Users can add videos to playlists from the video card menu.
+5. Add to playlist opens a proper dialog with existing playlists and a new playlist name field.
+6. Users can remove videos from playlist detail pages.
+
+Subscriptions
+-------------
+1. Users can subscribe to creators/channels.
+2. Users can unsubscribe from subscribed creators.
+3. The Subscriptions page lists subscribed channels.
+4. The subscription list shows an unsubscribe option.
+
+History, Liked Videos, Downloads
+--------------------------------
+1. Users can access watch history.
+2. Users can clear watch history.
+3. Users can access liked videos.
+4. Downloads page exists as a placeholder for browser app limitations.
+
+Create Menu
+-----------
+1. Upload video is available from the Create dropdown.
+2. Go live page exists as a placeholder.
+3. Create Short is available from the Create dropdown.
+4. Create post is available from the Create dropdown.
+
+Community Posts
+---------------
+1. Users can create community posts with description text.
+2. Users can attach images to posts.
+3. Users can attach videos to posts.
+4. Users can create text poll posts.
+5. Users can save posts as drafts.
+6. Published posts appear in the Published tab.
+7. Draft posts appear in the Scheduled tab.
+8. Published posts can be archived.
+9. Archived posts appear in the Archived tab.
+10. Draft or archived posts can be published/restored.
+
+Shorts
+------
+1. Users can upload Shorts from the Create Short page.
+2. Shorts are saved with the Shorts category.
+3. Shorts only appear in the Shorts section.
+4. Shorts do not appear in the normal home feed.
+5. Shorts page uses a vertical Shorts viewer layout.
+6. Shorts viewer shows the current short video, creator info, title, and description.
+7. Shorts viewer includes Like, Dislike, and Comments actions.
+8. Share action was removed from the Shorts action list.
+9. Shorts viewer supports up/down navigation between shorts.
+10. Shorts viewer layout is centered on the page.
+
+Channel And Profile
+-------------------
+1. Users can view their own channel.
+2. Users can view other channels.
+3. Users can customize/edit channel profile information.
+4. Users can manage their uploaded videos.
+5. Profile menu links to the current user's channel.
+
+Backend/Data
+------------
+1. Backend API routes were added or extended for notifications.
+2. Backend API routes were added or extended for Watch Later.
+3. Backend API routes were added or extended for playlists.
+4. Backend API routes were added or extended for community posts.
+5. Backend upload handling supports videos, thumbnails, post images/videos, and shorts.
+6. Video restore support was used to recreate video records from existing uploaded files when MongoDB data was empty.
+

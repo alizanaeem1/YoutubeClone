@@ -9,9 +9,12 @@ import {
   toggleDislike,
   incrementViews,
   getLikedVideos,
+  getWatchLaterVideos,
   getMyVideos,
   getSubscriptionsFeed,
-  getVideosByChannel
+  getVideosByChannel,
+  toggleWatchLater,
+  watchLaterStatus
 } from "../controllers/videoController.js";
 import { protect } from "../middleware/authMiddleware.js";
 import validate from "../middleware/validate.js";
@@ -24,6 +27,7 @@ router.get("/", getVideos);
 // Static, user-specific feeds must be declared before `/:id`
 // otherwise Express will treat "liked" as an `id` and fail validation.
 router.get("/liked", protect, getLikedVideos);
+router.get("/watch-later", protect, getWatchLaterVideos);
 router.get("/my", protect, getMyVideos);
 router.get("/subscriptions/feed", protect, getSubscriptionsFeed);
 
@@ -46,5 +50,7 @@ router.delete("/:id", protect, idValidator, validate, deleteVideo);
 router.patch("/:id/views", idValidator, validate, incrementViews);
 router.patch("/:id/like", protect, idValidator, validate, toggleLike);
 router.patch("/:id/dislike", protect, idValidator, validate, toggleDislike);
+router.get("/:id/watch-later", protect, idValidator, validate, watchLaterStatus);
+router.patch("/:id/watch-later", protect, idValidator, validate, toggleWatchLater);
 
 export default router;

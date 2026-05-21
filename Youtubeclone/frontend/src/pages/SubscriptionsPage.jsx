@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import LoaderSkeleton from "../components/LoaderSkeleton";
-import { getMySubscriptionsApi } from "../api/interactionApi";
+import { getMySubscriptionsApi, toggleSubscriptionApi } from "../api/interactionApi";
 import { useNavigate } from "react-router-dom";
 import { resolveMediaUrl } from "../utils/media";
 
@@ -8,6 +8,7 @@ function SubscriptionsPage() {
   const [channels, setChannels] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [updatingId, setUpdatingId] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,6 +26,20 @@ function SubscriptionsPage() {
     };
     run();
   }, []);
+
+  const unsubscribe = async (e, channelId) => {
+    e.stopPropagation();
+    setUpdatingId(channelId);
+    setError("");
+    try {
+      await toggleSubscriptionApi(channelId);
+      setChannels((current) => current.filter((channel) => channel._id !== channelId));
+    } catch {
+      setError("Failed to unsubscribe. Please try again.");
+    } finally {
+      setUpdatingId("");
+    }
+  };
 
   if (loading) return <LoaderSkeleton />;
   if (error) return <p className="text-error">{error}</p>;
@@ -52,6 +67,14 @@ function SubscriptionsPage() {
               <div className="channel-list-name">{channel.name}</div>
               <div className="channel-list-subs text-secondary">{channel.subscribersCount || 0} subscribers</div>
             </div>
+            <button
+              type="button"
+              className="btn-subscribe channel-unsubscribe-btn"
+              onClick={(e) => unsubscribe(e, channel._id)}
+              disabled={updatingId === channel._id}
+            >
+              {updatingId === channel._id ? "Removing..." : "Unsubscribe"}
+            </button>
           </button>
         ))}
       </div>

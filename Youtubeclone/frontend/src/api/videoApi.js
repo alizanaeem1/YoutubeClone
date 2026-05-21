@@ -11,6 +11,9 @@ export const getVideoApi = (id) => api.get(`/videos/${id}`);
 export const incrementViewsApi = (id) => api.patch(`/videos/${id}/views`);
 export const likeVideoApi = (id) => api.patch(`/videos/${id}/like`);
 export const dislikeVideoApi = (id) => api.patch(`/videos/${id}/dislike`);
+export const getWatchLaterStatusApi = (id) => api.get(`/videos/${id}/watch-later`);
+export const toggleWatchLaterApi = (id) => api.patch(`/videos/${id}/watch-later`);
+export const getWatchLaterVideosApi = () => api.get("/videos/watch-later");
 export const uploadVideoApi = (formData) =>
   api.post("/videos", formData, {
     headers: { "Content-Type": "multipart/form-data" }

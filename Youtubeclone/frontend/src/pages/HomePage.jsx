@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getVideosApi } from "../api/videoApi";
 import VideoCard from "../components/VideoCard";
 import LoaderSkeleton from "../components/LoaderSkeleton";
@@ -9,6 +9,7 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [params] = useSearchParams();
+  const navigate = useNavigate();
   const q = params.get("q") || "";
   const categories = ["All", "Entertainment", "Education", "Gaming", "Technology", "Music", "Sports", "News", "Vlog"];
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -29,6 +30,11 @@ function HomePage() {
     run();
   }, [q, selectedCategory]);
 
+  const selectCategory = (category) => {
+    setSelectedCategory(category);
+    if (q) navigate("/");
+  };
+
   if (loading) {
     return (
       <div className="home-stack">
@@ -44,7 +50,7 @@ function HomePage() {
         {categories.map(c => (
           <button
             key={c}
-            onClick={() => setSelectedCategory(c)}
+            onClick={() => selectCategory(c)}
             style={{
               padding: '6px 14px',
               borderRadius: 'var(--radius-md)',

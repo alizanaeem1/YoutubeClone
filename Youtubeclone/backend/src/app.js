@@ -10,6 +10,9 @@ import videoRoutes from "./routes/videoRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import subscriptionRoutes from "./routes/subscriptionRoutes.js";
 import historyRoutes from "./routes/historyRoutes.js";
+import notificationRoutes from "./routes/notificationRoutes.js";
+import playlistRoutes from "./routes/playlistRoutes.js";
+import postRoutes from "./routes/postRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 
 const app = express();
@@ -37,6 +40,9 @@ app.use("/api/videos", videoRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/subscriptions", subscriptionRoutes);
 app.use("/api/history", historyRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/playlists", playlistRoutes);
+app.use("/api/posts", postRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

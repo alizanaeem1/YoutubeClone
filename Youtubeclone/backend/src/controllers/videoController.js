@@ -1,7 +1,10 @@
 import path from "path";
 import Video from "../models/Video.js";
 import Comment from "../models/Comment.js";
+import Notification from "../models/Notification.js";
 import Subscription from "../models/Subscription.js";
+import WatchLater from "../models/WatchLater.js";
+import Playlist from "../models/Playlist.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
 import { cloudinary, isCloudinaryEnabled } from "../config/cloudinary.js";
@@ -34,6 +37,18 @@ export const createVideo = asyncHandler(async (req, res) => {
     thumbnailUrl
   });
 
+  const subscribers = await Subscription.find({ channel: req.user._id }).select("subscriber");
+  if (subscribers.length) {
+    await Notification.insertMany(
+      subscribers.map((subscription) => ({
+        recipient: subscription.subscriber,
+        actor: req.user._id,
+        type: "upload",
+        video: video._id
+      }))
+    );
+  }
+
   res.status(201).json(video);
 });
 
@@ -55,8 +70,12 @@ export const getVideos = asyncHandler(async (req, res) => {
     }
   }
 
-  if (category && category !== "All") {
+  if (category === "Shorts") {
+    query.category = "Shorts";
+  } else if (category && category !== "All") {
     query.category = category;
+  } else {
+    query.category = { $ne: "Shorts" };
   }
 
   const videos = await Video.find(query)
@@ -96,6 +115,8 @@ export const deleteVideo = asyncHandler(async (req, res) => {
   if (String(video.owner) !== String(req.user._id)) throw new ApiError(403, "Not allowed");
 
   await Comment.deleteMany({ video: video._id });
+  await WatchLater.deleteMany({ video: video._id });
+  await Playlist.updateMany({ videos: video._id }, { $pull: { videos: video._id } });
   await video.deleteOne();
   res.json({ message: "Video deleted" });
 });
@@ -113,6 +134,14 @@ export const toggleLike = asyncHandler(async (req, res) => {
   } else {
     video.likes.push(userId);
     if (disliked) video.dislikes = video.dislikes.filter((id) => String(id) !== String(userId));
+    if (String(video.owner) !== String(userId)) {
+      await Notification.create({
+        recipient: video.owner,
+        actor: userId,
+        type: "like",
+        video: video._id
+      });
+    }
   }
 
   await video.save();
@@ -143,6 +172,37 @@ export const getLikedVideos = asyncHandler(async (req, res) => {
     .populate("owner", "name avatar")
     .sort({ createdAt: -1 });
   res.json(videos);
+});
+
+export const getWatchLaterVideos = asyncHandler(async (req, res) => {
+  const entries = await WatchLater.find({ user: req.user._id })
+    .populate({
+      path: "video",
+      populate: { path: "owner", select: "name avatar" }
+    })
+    .sort({ createdAt: -1 });
+
+  const videos = entries.map((entry) => entry.video).filter(Boolean);
+  res.json(videos);
+});
+
+export const watchLaterStatus = asyncHandler(async (req, res) => {
+  const existing = await WatchLater.findOne({ user: req.user._id, video: req.params.id });
+  res.json({ saved: Boolean(existing) });
+});
+
+export const toggleWatchLater = asyncHandler(async (req, res) => {
+  const video = await Video.findById(req.params.id).select("_id");
+  if (!video) throw new ApiError(404, "Video not found");
+
+  const existing = await WatchLater.findOne({ user: req.user._id, video: video._id });
+  if (existing) {
+    await existing.deleteOne();
+    return res.json({ saved: false });
+  }
+
+  await WatchLater.create({ user: req.user._id, video: video._id });
+  res.status(201).json({ saved: true });
 });
 
 export const getMyVideos = asyncHandler(async (req, res) => {

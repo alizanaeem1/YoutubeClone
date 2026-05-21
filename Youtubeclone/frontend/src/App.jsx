@@ -13,6 +13,14 @@ import SubscriptionsPage from "./pages/SubscriptionsPage";
 import YouPage from "./pages/YouPage";
 import MyChannelPage from "./pages/MyChannelPage";
 import HistoryPage from "./pages/HistoryPage";
+import WatchLaterPage from "./pages/WatchLaterPage";
+import PlaylistsPage from "./pages/PlaylistsPage";
+import PlaylistDetailPage from "./pages/PlaylistDetailPage";
+import DownloadsPage from "./pages/DownloadsPage";
+import GoLivePage from "./pages/GoLivePage";
+import CreatePostPage from "./pages/CreatePostPage";
+import CreateShortPage from "./pages/CreateShortPage";
+import ShortsPage from "./pages/ShortsPage";
 import LoaderSkeleton from "./components/LoaderSkeleton";
 
 function App() {
@@ -59,11 +67,19 @@ function App() {
         <main className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
+            <Route path="/shorts" element={<ShortsPage />} />
             <Route path="/watch/:id" element={<VideoPlayerPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/upload" element={user ? <UploadPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/go-live" element={user ? <GoLivePage /> : <Navigate to="/auth" replace />} />
+            <Route path="/create-short" element={user ? <CreateShortPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/create-post" element={user ? <CreatePostPage /> : <Navigate to="/auth" replace />} />
             <Route path="/subscriptions" element={user ? <SubscriptionsPage /> : <Navigate to="/auth" replace />} />
             <Route path="/liked" element={user ? <LikedVideosPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/watch-later" element={user ? <WatchLaterPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/playlists" element={user ? <PlaylistsPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/playlists/:id" element={user ? <PlaylistDetailPage /> : <Navigate to="/auth" replace />} />
+            <Route path="/downloads" element={user ? <DownloadsPage /> : <Navigate to="/auth" replace />} />
             <Route path="/you" element={user ? <YouPage /> : <Navigate to="/auth" replace />} />
             <Route path="/my-channel" element={user ? <MyChannelPage /> : <Navigate to="/auth" replace />} />
             <Route path="/history" element={user ? <HistoryPage /> : <Navigate to="/auth" replace />} />

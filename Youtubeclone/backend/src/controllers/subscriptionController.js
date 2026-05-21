@@ -1,4 +1,5 @@
 import Subscription from "../models/Subscription.js";
+import Notification from "../models/Notification.js";
 import User from "../models/User.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
@@ -20,6 +21,11 @@ export const toggleSubscription = asyncHandler(async (req, res) => {
 
   await Subscription.create({ subscriber: req.user._id, channel: channelId });
   await User.findByIdAndUpdate(channelId, { $inc: { subscribersCount: 1 } });
+  await Notification.create({
+    recipient: channelId,
+    actor: req.user._id,
+    type: "subscription"
+  });
   return res.json({ subscribed: true });
 });
 

@@ -1,4 +1,5 @@
 import Comment from "../models/Comment.js";
+import Notification from "../models/Notification.js";
 import Video from "../models/Video.js";
 import asyncHandler from "../utils/asyncHandler.js";
 import ApiError from "../utils/ApiError.js";
@@ -9,6 +10,15 @@ export const addComment = asyncHandler(async (req, res) => {
   if (!video) throw new ApiError(404, "Video not found");
 
   const comment = await Comment.create({ video: videoId, user: req.user._id, content });
+  if (String(video.owner) !== String(req.user._id)) {
+    await Notification.create({
+      recipient: video.owner,
+      actor: req.user._id,
+      type: "comment",
+      video: video._id,
+      comment: comment._id
+    });
+  }
   const populated = await comment.populate("user", "name avatar");
   res.status(201).json(populated);
 });
